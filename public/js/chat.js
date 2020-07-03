@@ -38,9 +38,8 @@ const autoScroll = () => {
     }
 }
 
-// Share a message 
+// Print message 
 socket.on('message', (message) => {
-    console.log(message)
     const html = Mustache.render(messageTemplate, {
         username: message.username,
         message: message.text,
@@ -50,13 +49,12 @@ socket.on('message', (message) => {
     autoScroll()
 })
 
-// Share a location
-socket.on('location', (location) => {
-    console.log(location.url)
+// Print location
+socket.on('location', (message) => {
     const html = Mustache.render(linkTemplate, {
-        username: location.username,
-        url: location.url,
-        createdAt: moment(location.createdAt).format('h:mm a')
+        username: message.username,
+        url: message.url,
+        createdAt: moment(message.createdAt).format('h:mm a')
     })
     $messages.insertAdjacentHTML('beforeend', html)
     autoScroll()
@@ -75,7 +73,6 @@ $messageForm.addEventListener('submit', (e) => {
         if(error){
             alert(error)
         }
-        console.log('Message Delivered!') 
     })
 })
 
@@ -92,7 +89,6 @@ $locationButton.addEventListener('click', (e) => {
             longitude: position.coords.latitude
         }, () => {
             $locationButton.removeAttribute('disabled')
-            console.log('Location Shared')
         })
     })
 })
